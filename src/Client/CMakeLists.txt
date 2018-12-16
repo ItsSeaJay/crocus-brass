@@ -1,5 +1,5 @@
 set(SOURCES
 	main.cpp)
 
-add_executable(CrocusBrassClient
+add_executable(${PROJECT_NAME}
                ${SOURCES})
