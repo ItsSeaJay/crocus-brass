@@ -1,4 +1,5 @@
 #include <iostream>
+#include <mutex>
 
 #include "SFML/Network.hpp"
 
@@ -16,6 +17,8 @@ namespace cb
 		void serve();
 
 		bool mOnline { true };
+
+		std::mutex mMutex;
 
 		sf::TcpSocket mSocket;
 		sf::TcpListener listener;

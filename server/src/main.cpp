@@ -7,14 +7,12 @@
 
 int main(int argc, char** argv)
 {
-	bool running { true };
 	cb::Server* server { new cb::Server(3000) };
-	std::thread listeningThread(&cb::Server::listen, &server);
+	std::thread listeningThread(&cb::Server::listen, server);
+	std::thread servingThread(&cb::Server::serve, server);
 
-	while (running)
-	{
-
-	}
+	listeningThread.join();
+	servingThread.join();
 
 	delete server;
 	server = nullptr;

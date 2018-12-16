@@ -15,3 +15,7 @@ add_executable(${PROJECT_NAME}Server
                ${INCLUDES})
 
 target_link_libraries(${PROJECT_NAME}Server sfml-network)
+
+if(UNIX)
+	target_link_libraries(${PROJECT_NAME}Server pthread)
+endif(UNIX)

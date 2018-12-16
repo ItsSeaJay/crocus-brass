@@ -16,12 +16,20 @@ cb::Server::~Server()
 
 void cb::Server::listen()
 {
-	listener.accept(mSocket);
+	do
+	{
+		mMutex.lock();
+			listener.accept(mSocket);
+		mMutex.unlock();
 
-	std::cout << "New client @" << mSocket.getRemoteAddress() << std::endl;
+		std::cout << "New client @" << mSocket.getRemoteAddress() << std::endl;
+	} while (mOnline)
 }
 
 void cb::Server::serve()
 {
-	std::cout << "Test" << std::endl;
+	while(mOnline)
+	{
+		std::cout << "Test" << std::endl;
+	}
 }
