@@ -5,5 +5,6 @@ cmake_minimum_required(VERSION 3.0)
 # Tell CMake what the project is called
 project(CrocusBrass)
 
-# Add the different subdirectories for the different executables
-add_subdirectory(src/Client)
+# Add subdirectories for the different executables
+add_subdirectory(client)
+add_subdirectory(server)
