@@ -6,7 +6,7 @@ cb::Server::Server
 )
 : mPort(port)
 {
-    //ctor
+	listener.listen(mPort);
 }
 
 cb::Server::~Server()
@@ -16,14 +16,12 @@ cb::Server::~Server()
 
 void cb::Server::listen()
 {
-	sf::TcpListener listener;
-
-	// Listen for incoming connections on the server port
-	listener.listen(mPort);
 	listener.accept(mSocket);
 
-	// Show who just connected
-	std::cout << "New client connected: "
-	          << mSocket.getRemoteAddress()
-	          << std::endl;
+	std::cout << "New client @" << mSocket.getRemoteAddress() << std::endl;
+}
+
+void cb::Server::serve()
+{
+	std::cout << "Test" << std::endl;
 }

@@ -13,10 +13,12 @@ namespace cb
 		~Server();
 
 		void listen();
+		void serve();
 
 		bool mOnline { true };
 
 		sf::TcpSocket mSocket;
+		sf::TcpListener listener;
 
 	private:
 		const int mPort;
