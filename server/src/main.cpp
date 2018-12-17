@@ -11,6 +11,7 @@ int main(int argc, char** argv)
 	std::thread listeningThread(&cb::Server::listen, server);
 	std::thread servingThread(&cb::Server::serve, server);
 
+	// Start seperate threads for new connections and packets
 	listeningThread.join();
 	servingThread.join();
 

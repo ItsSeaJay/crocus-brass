@@ -1,6 +1,6 @@
 #include <iostream>
+#include <list>
 #include <mutex>
-
 #include "SFML/Network.hpp"
 
 #pragma once
@@ -15,13 +15,15 @@ namespace cb
 
 		void listen();
 		void serve();
+		void dumpClients();
 
 		bool mOnline { true };
 
 		std::mutex mMutex;
 
-		sf::TcpSocket mSocket;
-		sf::TcpListener listener;
+		std::list<sf::TcpSocket*> mClients;
+		sf::SocketSelector mSocketSelector;
+		sf::TcpListener mListener;
 
 	private:
 		const int mPort;
