@@ -1,6 +1,9 @@
 #include <iostream>
 #include <list>
 #include <mutex>
+#include <vector>
+#include <string>
+
 #include "SFML/Network.hpp"
 
 #pragma once
@@ -15,11 +18,13 @@ namespace cb
 
 		void serve();
 
+		const unsigned short mCapacity = 32;
+
 		bool mOnline = true;
 
 		std::mutex mMutex;
 
-		std::list<sf::TcpSocket*> mClients;
+		std::vector<sf::TcpSocket*> mClients;
 		sf::SocketSelector mSocketSelector;
 		sf::TcpListener mListener;
 

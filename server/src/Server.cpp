@@ -21,7 +21,8 @@ void cb::Server::serve()
 				// There is a pending connection
 				sf::TcpSocket* client = new sf::TcpSocket();
 
-				if (mListener.accept(*client) == sf::Socket::Done)
+				if (mListener.accept(*client) == sf::Socket::Done &&
+					mClients.size() < mCapacity)
 				{
 					// Add the new client to the clients list
 					mClients.push_back(client);
@@ -39,18 +40,28 @@ void cb::Server::serve()
 			else
 			{
 				// The listener socket is not ready, test all other sockets
-				for (std::list<sf::TcpSocket*>::iterator i = mClients.begin(); i != mClients.end(); ++i)
+				for (auto client : mClients)
 				{
-					sf::TcpSocket& client = **i;
-
 					if (mSocketSelector.isReady(client))
 					{
 						// The client has sent some data
 						sf::Packet packet;
 
-						if (client.receive(packet) == sf::Socket::Done)
+						switch(client.receive(packet))
 						{
-							// Deserialize the packet
+							case sf::Socket::Done:
+								// Deserialize the packet
+								std::string message;
+
+								if (packet >> message)
+								{
+									std::cout << message;
+								}
+								break;
+
+							case sf::Socket::Disconnected:
+								// Remove that client from the list
+								break;
 						}
 					}
 				}

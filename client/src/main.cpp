@@ -15,5 +15,9 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
 	}
 
+	std::string message = "Hello, World!";
+
+	socket.send(message.c_str(), message.size() + 1);
+
 	return EXIT_SUCCESS;
 }
