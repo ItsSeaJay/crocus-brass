@@ -10,14 +10,12 @@ namespace cb
 	class Server
 	{
 	public:
-		Server(const int& port);
+		Server(const unsigned short& port);
 		~Server();
 
-		void listen();
 		void serve();
-		void dumpClients();
 
-		bool mOnline { true };
+		bool mOnline = true;
 
 		std::mutex mMutex;
 
@@ -26,6 +24,6 @@ namespace cb
 		sf::TcpListener mListener;
 
 	private:
-		const int mPort;
+		const unsigned short mPort;
 	};
 }

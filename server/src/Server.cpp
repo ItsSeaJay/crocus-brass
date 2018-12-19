@@ -1,12 +1,12 @@
 #include "Server.h"
 
-cb::Server::Server(const int& port)
+cb::Server::Server(const unsigned short& port)
 : mPort(port)
 {}
 
 cb::Server::~Server() {}
 
-void cb::Server::listen()
+void cb::Server::serve()
 {
 	mListener.listen(mPort);	
 	mSocketSelector.add(mListener);
@@ -18,7 +18,6 @@ void cb::Server::listen()
 		{
 			if (mSocketSelector.isReady(mListener))
 			{
-				// The listener is ready
 				// There is a pending connection
 				sf::TcpSocket* client = new sf::TcpSocket();
 
@@ -30,8 +29,6 @@ void cb::Server::listen()
 					// Also add them to the selector so we'll be notified when
 					// they give us something
 					mSocketSelector.add(*client);
-
-					dumpClients();
 				}
 				else
 				{
@@ -42,23 +39,22 @@ void cb::Server::listen()
 			else
 			{
 				// The listener socket is not ready, test all other sockets
+				for (std::list<sf::TcpSocket*>::iterator i = mClients.begin(); i != mClients.end(); ++i)
+				{
+					sf::TcpSocket& client = **i;
 
+					if (mSocketSelector.isReady(client))
+					{
+						// The client has sent some data
+						sf::Packet packet;
+
+						if (client.receive(packet) == sf::Socket::Done)
+						{
+							// Deserialize the packet
+						}
+					}
+				}
 			}
 		}
 	} while (mOnline);
-}
-
-void cb::Server::serve()
-{
-	std::cout << "Test" << std::endl;
-}
-
-void cb::Server::dumpClients()
-{
-	for(std::list<sf::TcpSocket*>::iterator i = mClients.begin(); i != mClients.end(); ++i)
-	{
-		sf::TcpSocket& client = **i;
-
-		std::cout << client.getRemoteAddress() << std::endl;
-	}
 }
