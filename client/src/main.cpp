@@ -4,7 +4,6 @@
 
 int main(int argc, char** argv)
 {
-	std::cout << "Client" << std::endl;
 	sf::TcpSocket socket;
 	sf::Socket::Status status = socket.connect("localhost", 3000);
 

@@ -3,6 +3,7 @@
 #include <mutex>
 #include <vector>
 #include <string>
+#include <typeinfo>
 
 #include "SFML/Network.hpp"
 

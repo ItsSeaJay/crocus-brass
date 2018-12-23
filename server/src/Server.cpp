@@ -39,29 +39,17 @@ void cb::Server::serve()
 			}
 			else
 			{
-				// The listener socket is not ready, test all other sockets
-				for (auto client : mClients)
+				// The listener socket is not ready
+				// test all other sockets
+				for (auto* client : mClients)
 				{
-					if (mSocketSelector.isReady(client))
+					if (mSocketSelector.isReady(*client))
 					{
-						// The client has sent some data
 						sf::Packet packet;
 
-						switch(client.receive(packet))
+						if (client->receive(packet) == sf::Socket::Done)
 						{
-							case sf::Socket::Done:
-								// Deserialize the packet
-								std::string message;
-
-								if (packet >> message)
-								{
-									std::cout << message;
-								}
-								break;
-
-							case sf::Socket::Disconnected:
-								// Remove that client from the list
-								break;
+							std::cout << "Received a packet!" << std::endl;
 						}
 					}
 				}

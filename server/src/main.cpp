@@ -9,8 +9,10 @@ int main(int argc, char** argv)
 {
 	cb::Server* server = new cb::Server(3000);
 
+	// Start the server
 	server->serve();
 
+	// Deallocate the memory used by the server
 	delete server;
 	server = nullptr;
 
