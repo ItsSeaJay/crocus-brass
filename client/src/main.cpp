@@ -33,7 +33,7 @@ int main(int argc, char** argv)
 			<< "]: ";
 		
 		// Capture their input
-		std::cin >> message;
+		std::getline(std::cin, message);
 
 		// Serialize that input into a packet
 		packet << message;
