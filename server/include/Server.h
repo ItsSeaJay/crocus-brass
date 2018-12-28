@@ -25,7 +25,7 @@ namespace cb
 
 		std::mutex mMutex;
 
-		std::vector<sf::TcpSocket*> mClients;
+		std::list<sf::TcpSocket*> mClients;
 		sf::SocketSelector mSocketSelector;
 		sf::TcpListener mListener;
 

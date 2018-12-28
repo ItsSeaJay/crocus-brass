@@ -18,7 +18,8 @@ void cb::Server::serve()
 		{
 			if (mSocketSelector.isReady(mListener))
 			{
-				// There is a pending connection
+				// The listener is ready
+				// This indicates a pending connection
 				sf::TcpSocket* client = new sf::TcpSocket();
 
 				if (mListener.accept(*client) == sf::Socket::Done &&
@@ -39,17 +40,23 @@ void cb::Server::serve()
 			}
 			else
 			{
-				// The listener socket is not ready
-				// test all other sockets
-				for (auto* client : mClients)
+				// The listener socket isn't ready yet
+				// test all other live TCP sockets for incoming data
+				for (std::list<sf::TcpSocket*>::iterator iterator = mClients.begin();
+					iterator != mClients.end();
+					++iterator)
 				{
-					if (mSocketSelector.isReady(*client))
+					// Dereference the client pointer
+					sf::TcpSocket& client = **iterator;
+
+					if (mSocketSelector.isReady(client))
 					{
+						// The client has sent some data
 						sf::Packet packet;
 
-						if (client->receive(packet) == sf::Socket::Done)
+						if (client.receive(packet) == sf::Socket::Done)
 						{
-							std::cout << "Received a packet!" << std::endl;
+							std::cout << "..." << std::endl;
 						}
 					}
 				}
