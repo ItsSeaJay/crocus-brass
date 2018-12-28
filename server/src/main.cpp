@@ -7,7 +7,8 @@
 
 int main(int argc, char** argv)
 {
-	cb::Server* server = new cb::Server(3000);
+	unsigned const short port = 3000;
+	cb::Server* server = new cb::Server(port);
 
 	// Start the server
 	server->serve();

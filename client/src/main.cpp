@@ -4,9 +4,13 @@
 
 int main(int argc, char** argv)
 {
+	bool online = true;
+
 	sf::TcpSocket socket;
 	sf::Socket::Status status = socket.connect("localhost", 3000);
+	sf::IpAddress localhost = "localhost";
 
+	// Check that the connection attempt was successful
 	if (status != sf::Socket::Done)
 	{
         std::cerr << "An error has occured trying to connect to the server." << std::endl;
@@ -14,9 +18,21 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
 	}
 
+	// Try to send a packet to the remote server
 	std::string message = "Hello, World!";
+	sf::Packet packet;
 
-	socket.send(message.c_str(), message.size() + 1);
+	packet << message;
+
+	do
+	{
+		if (socket.send(packet) != sf::Socket::Done)
+		{
+			std::cerr << "Packet could not be sent to " << socket.getRemoteAddress();
+
+			return EXIT_FAILURE;
+		}
+	} while (online);
 
 	return EXIT_SUCCESS;
 }

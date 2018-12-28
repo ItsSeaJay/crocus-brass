@@ -2,7 +2,12 @@
 
 cb::Server::Server(const unsigned short& port)
 : mPort(port)
-{}
+{
+	// Notify the user of a new server
+	std::cout << "Created a server on port "
+		<< port
+		<< std::endl;
+}
 
 cb::Server::~Server() {}
 
@@ -10,6 +15,8 @@ void cb::Server::serve()
 {
 	mListener.listen(mPort);	
 	mSocketSelector.add(mListener);
+
+	std::cout << "Beginning service..." << std::endl;
 
 	do
 	{
@@ -22,15 +29,26 @@ void cb::Server::serve()
 				// This indicates a pending connection
 				sf::TcpSocket* client = new sf::TcpSocket();
 
-				if (mListener.accept(*client) == sf::Socket::Done &&
-					mClients.size() < mCapacity)
+				if (mListener.accept(*client) == sf::Socket::Done)
 				{
-					// Add the new client to the clients list
-					mClients.push_back(client);
+					if (mClients.size() < mCapacity)
+					{
+						std::cout << "New connection from "
+							<< client->getRemoteAddress()
+							<< ':'
+							<< client->getRemotePort();
 
-					// Also add them to the selector so we'll be notified when
-					// they give us something
-					mSocketSelector.add(*client);
+						// Add the new client to the clients list
+						mClients.push_back(client);
+
+						// Also add them to the selector so we'll be notified when
+						// they give us something
+						mSocketSelector.add(*client);
+					}
+					else
+					{
+						std::cerr << "Server is full!";
+					}
 				}
 				else
 				{
@@ -56,7 +74,13 @@ void cb::Server::serve()
 
 						if (client.receive(packet) == sf::Socket::Done)
 						{
-							std::cout << "..." << std::endl;
+							std::string message;
+
+							// Deserialize the message from the packet
+							packet >> message;
+
+							// Output that message
+							std::cout << message << std::endl;
 						}
 					}
 				}
