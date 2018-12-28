@@ -36,7 +36,8 @@ void cb::Server::serve()
 						std::cout << "New connection from "
 							<< client->getRemoteAddress()
 							<< ':'
-							<< client->getRemotePort();
+							<< client->getRemotePort()
+							<< std::endl;
 
 						// Add the new client to the clients list
 						mClients.push_back(client);
@@ -77,10 +78,17 @@ void cb::Server::serve()
 							std::string message;
 
 							// Deserialize the message from the packet
-							packet >> message;
-
-							// Output that message
-							std::cout << message << std::endl;
+							if (packet >> message)
+							{
+								// Output that message
+								std::cout << '['
+									<< client.getRemoteAddress()
+									<< ':'
+									<< client.getRemotePort()
+									<< "]: "
+									<< message
+									<< std::endl;
+							}
 						}
 					}
 				}
